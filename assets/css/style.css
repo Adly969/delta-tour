@@ -2049,11 +2049,13 @@ p {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 14px;
+  min-width: 0;
 }
 
 .form-field {
   display: grid;
   gap: 7px;
+  min-width: 0;
 }
 
 .form-field.full {
@@ -2069,13 +2071,41 @@ p {
 .form-field select,
 .form-field textarea {
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  min-height: 52px;
   padding: 12px 14px;
   color: var(--text-main);
   background: var(--white);
   border: 1px solid var(--border);
   border-radius: 12px;
   outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  font-size: 16px;
+  line-height: 1.35;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-field select {
+  padding-right: 44px;
+  background-image: linear-gradient(45deg, transparent 50%, var(--primary) 50%), linear-gradient(135deg, var(--primary) 50%, transparent 50%);
+  background-position: calc(100% - 20px) 50%, calc(100% - 14px) 50%;
+  background-size: 7px 7px, 7px 7px;
+  background-repeat: no-repeat;
+}
+
+.form-field input[type="date"] {
+  text-align: left;
+}
+
+.form-field input[type="date"]::-webkit-date-and-time-value {
+  min-height: 1.35em;
+  text-align: left;
+}
+
+.form-field textarea {
+  resize: vertical;
 }
 
 .form-field input:focus,
@@ -2342,6 +2372,11 @@ p {
     width: min(100% - 24px, 1200px);
   }
 
+  html,
+  body {
+    overflow-x: hidden;
+  }
+
   .navbar {
     width: min(100% - 24px, 1200px);
   }
@@ -2412,6 +2447,18 @@ p {
   .wisata-meta-grid,
   .form-grid {
     grid-template-columns: 1fr;
+  }
+
+  .contact-grid,
+  .content-panel,
+  .form-grid,
+  .form-field {
+    min-width: 0;
+  }
+
+  .content-panel {
+    overflow: hidden;
+    padding: 22px;
   }
 
   .stats-grid {
@@ -2485,6 +2532,18 @@ p {
   .floating-wa {
     right: 14px;
     bottom: 14px;
+    bottom: calc(14px + env(safe-area-inset-bottom));
+    width: 54px;
+    height: 54px;
+    padding: 0;
+    gap: 0;
+    border-radius: 999px;
+    font-size: 0;
+  }
+
+  .floating-wa svg {
+    width: 24px;
+    height: 24px;
   }
 
   .page-hero {
