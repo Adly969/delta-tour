@@ -5,7 +5,22 @@ function buildWhatsAppUrl(message) {
 }
 
 function openWhatsApp(packageName = "Konsultasi perjalanan Delta Tour") {
-  const message = `Halo Admin Delta Tour,
+  const lowerName = packageName.toLowerCase();
+  const isRental = ["sewa", "mobil", "hiace", "elf", "armada", "driver"].some((keyword) =>
+    lowerName.includes(keyword)
+  );
+
+  const message = isRental
+    ? `Halo Admin Delta Tour,
+Saya ingin konsultasi sewa mobil / armada:
+
+Layanan: ${packageName}
+Tanggal:
+Jumlah Penumpang:
+Tujuan / Rute:
+Titik Jemput:
+Catatan:`
+    : `Halo Admin Delta Tour,
 Saya ingin tanya paket wisata:
 
 Paket: ${packageName}
