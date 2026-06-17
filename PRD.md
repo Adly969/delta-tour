@@ -14,7 +14,7 @@ Tujuan utama website:
 
 - Membangun kepercayaan calon pelanggan terhadap Delta Tour.
 - Menampilkan paket wisata Jawa Timur dari Jember secara jelas.
-- Menampilkan harga mulai, destinasi, durasi, dan detail layanan.
+- Menampilkan estimasi biaya, destinasi, durasi, dan detail layanan.
 - Memudahkan pelanggan menghubungi admin melalui WhatsApp.
 - Menyediakan pengalaman mobile yang nyaman dan cepat.
 
@@ -201,7 +201,7 @@ Paket favorit:
 - Jember Beach Tour
 - Banyuwangi 2D1N
 
-Setiap card paket wajib memiliki gambar, badge, nama paket, deskripsi, harga mulai, tombol Detail, dan tombol WhatsApp.
+Setiap card paket wajib memiliki gambar, badge, nama paket, deskripsi, estimasi biaya, tombol Detail, dan tombol WhatsApp.
 
 Destinasi populer:
 
@@ -218,7 +218,7 @@ Destinasi populer:
 Kenapa memilih Delta Tour:
 
 - Start dari Jember
-- Harga Transparan
+- Estimasi Fleksibel
 - Driver Berpengalaman
 - Itinerary Fleksibel
 - Cocok untuk Keluarga dan Rombongan
@@ -228,7 +228,7 @@ Sewa mobil highlight:
 
 - Judul: Sewa Mobil + Driver dari Jember
 - Armada: Avanza / Xenia, Innova Reborn, Hiace, Elf
-- Harga mulai: Rp500.000 / hari
+- estimasi biaya: Konsultasi Admin
 - Tombol "Lihat Sewa Mobil" menuju `sewa-mobil.html`
 - Tombol "Chat WhatsApp" membuka WhatsApp
 
@@ -273,14 +273,14 @@ Daftar paket:
 
 | Paket | Kategori | Durasi | Harga |
 | --- | --- | --- | --- |
-| Jember Beach Tour | Jember | 1 Hari | Mulai Rp250.000 / pax |
-| Jember Family Tour | Jember | 1 Hari | Mulai Rp200.000 / pax |
-| Bromo Midnight dari Jember | Bromo | Midnight Trip | Mulai Rp550.000 / pax |
-| Kawah Ijen dari Jember | Bondowoso | Midnight Trip | Mulai Rp750.000 / pax |
-| Kawah Wurung Bondowoso | Bondowoso | 1 Hari | Mulai Rp350.000 / pax |
-| Tumpak Sewu Lumajang | Lumajang | 1 Hari | Mulai Rp450.000 / pax |
-| Banyuwangi 2D1N | Banyuwangi | 2 Hari 1 Malam | Mulai Rp1.200.000 / pax |
-| Baluran Banyuwangi 2D1N | Baluran | 2 Hari 1 Malam | Mulai Rp900.000 / pax |
+| Jember Beach Tour | Jember | 1 Hari | Konsultasi Admin |
+| Jember Family Tour | Jember | 1 Hari | Konsultasi Admin |
+| Bromo Midnight dari Jember | Bromo | Midnight Trip | Konsultasi Admin |
+| Kawah Ijen dari Jember | Bondowoso | Midnight Trip | Konsultasi Admin |
+| Kawah Wurung Bondowoso | Bondowoso | 1 Hari | Konsultasi Admin |
+| Tumpak Sewu Lumajang | Lumajang | 1 Hari | Konsultasi Admin |
+| Banyuwangi 2D1N | Banyuwangi | 2 Hari 1 Malam | Konsultasi Admin |
+| Baluran Banyuwangi 2D1N | Baluran | 2 Hari 1 Malam | Konsultasi Admin |
 | Custom Trip | Custom Trip | Sesuai request | Hubungi Admin |
 
 Setiap card paket wajib memiliki:
@@ -290,7 +290,7 @@ Setiap card paket wajib memiliki:
 - Kategori
 - Durasi
 - Destinasi singkat
-- Harga mulai
+- estimasi biaya
 - Tombol Detail
 - Tombol WhatsApp
 
@@ -303,7 +303,7 @@ Konten wajib:
 - Breadcrumb
 - Foto utama
 - Nama paket
-- Harga mulai
+- estimasi biaya
 - Durasi
 - Minimal peserta
 - Titik penjemputan
@@ -321,7 +321,7 @@ Bromo Midnight dari Jember
 
 Harga:
 
-Mulai Rp550.000 / pax
+Konsultasi Admin
 
 Durasi:
 
@@ -387,8 +387,8 @@ Armada:
 
 | Armada | Kapasitas | Harga | Cocok untuk |
 | --- | --- | --- | --- |
-| Avanza / Xenia | 4-6 orang | Mulai Rp500.000 / hari | Keluarga kecil dan city tour |
-| Innova Reborn | 5-6 orang | Mulai Rp700.000 / hari | Perjalanan luar kota yang lebih nyaman |
+| Avanza / Xenia | 4-6 orang | Konsultasi Admin | Keluarga kecil dan city tour |
+| Innova Reborn | 5-6 orang | Konsultasi Admin | Perjalanan luar kota yang lebih nyaman |
 | Hiace | 10-14 orang | Hubungi Admin | Rombongan sedang |
 | Elf | 12-18 orang | Hubungi Admin | Rombongan sekolah, komunitas, dan kantor |
 
@@ -397,7 +397,7 @@ Setiap card armada wajib memiliki:
 - Foto mobil
 - Nama mobil
 - Kapasitas
-- Harga mulai
+- estimasi biaya
 - Fasilitas
 - Tombol WhatsApp
 
@@ -451,7 +451,7 @@ Menjadi partner perjalanan wisata terpercaya dari Jember untuk menjelajahi keind
 Misi:
 
 - Memberikan layanan perjalanan yang nyaman dan aman.
-- Menyediakan paket wisata dengan harga transparan.
+- Menyediakan paket wisata dengan estimasi fleksibel.
 - Membantu pelanggan membuat itinerary yang fleksibel.
 - Mengutamakan kenyamanan pelanggan selama perjalanan.
 - Mengenalkan destinasi wisata terbaik di Jawa Timur.
@@ -618,7 +618,7 @@ Wajib:
 - Floating WhatsApp button di kanan bawah.
 - Foto destinasi besar dan jelas.
 - Card paket bersih dan modern.
-- Harga terlihat jelas.
+- estimasi biaya dikonsultasikan jelas.
 - Typography mudah dibaca.
 - Kontras warna bagus.
 - Footer lengkap.
@@ -693,4 +693,4 @@ Output final yang harus tersedia:
 
 Catatan akhir:
 
-Semua teks, logo, footer, tombol WhatsApp, meta title, dan halaman wajib menggunakan nama Delta Tour. Jangan gunakan nama "Jember Explore Travel". Fokus utama website adalah paket jelas, harga mulai jelas, foto menarik, tombol WhatsApp jelas, mobile nyaman, dan cepat dibuka.
+Semua teks, logo, footer, tombol WhatsApp, meta title, dan halaman wajib menggunakan nama Delta Tour. Jangan gunakan nama "Jember Explore Travel". Fokus utama website adalah paket jelas, estimasi biaya jelas, foto menarik, tombol WhatsApp jelas, mobile nyaman, dan cepat dibuka.
