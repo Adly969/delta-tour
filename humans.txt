@@ -1,0 +1,10 @@
+/* TEAM */
+Developer: Antigravity AI
+Contact: benspipin2@gmail.com
+Client: Delta Tour
+
+/* SITE */
+Last update: 2026-06-30
+Standards: HTML5, CSS3, ES6
+Components: Vanilla HTML, CSS, JS
+Software: Pure Node.js SEO Generator Suite

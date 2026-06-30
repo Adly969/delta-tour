@@ -1,0 +1,16 @@
+{
+  "name": "Delta Tour | Paket Wisata Jawa Timur dari Jember",
+  "short_name": "Delta Tour",
+  "description": "Delta Tour melayani paket wisata Bromo, Kawah Ijen, Kawah Wurung Bondowoso, Banyuwangi, Lumajang, Baluran, wisata Jember, dan sewa mobil dengan driver berpengalaman dari Jember.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F8FAF5",
+  "theme_color": "#0B3D5C",
+  "icons": [
+    {
+      "src": "assets/img/favicon-delta-tour.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    }
+  ]
+}

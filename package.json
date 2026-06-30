@@ -1,0 +1,18 @@
+{
+  "name": "delta-tour-seo-generator",
+  "version": "1.0.0",
+  "description": "Zero-dependency SEO Generator and Auditor Suite for Delta Tour",
+  "main": "scripts/seo-generator.js",
+  "scripts": {
+    "seo": "node scripts/seo-generator.js"
+  },
+  "keywords": [
+    "seo",
+    "generator",
+    "sitemap",
+    "audit",
+    "static"
+  ],
+  "author": "Antigravity",
+  "license": "ISC"
+}

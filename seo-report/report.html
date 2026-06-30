@@ -1,0 +1,1819 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SEO Generator Suite | Laporan Audit Proyek</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #0B3D5C;
+      --primary-light: #1E5E85;
+      --bg: #F8FAF5;
+      --card-bg: #ffffff;
+      --text: #0F172A;
+      --text-muted: #475569;
+      --success: #10B981;
+      --warning: #F59E0B;
+      --danger: #EF4444;
+      --border: #E2E8F0;
+      --radius: 16px;
+      --transition: all 0.25s ease-out;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 40px 20px;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: white;
+      padding: 40px;
+      border-radius: var(--radius);
+      margin-bottom: 30px;
+      box-shadow: 0 10px 30px rgba(11, 61, 92, 0.12);
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::after {
+      content: '';
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 50%;
+      top: -100px;
+      right: -100px;
+      pointer-events: none;
+    }
+    
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .header-logo {
+      font-weight: 800;
+      font-size: 0.9rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      opacity: 0.85;
+      margin-bottom: 8px;
+    }
+    
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+    
+    .subtitle {
+      font-size: 1.05rem;
+      opacity: 0.9;
+    }
+    
+    .meta-time {
+      display: inline-block;
+      margin-top: 15px;
+      font-size: 0.8rem;
+      background: rgba(255, 255, 255, 0.15);
+      padding: 6px 14px;
+      border-radius: 30px;
+      font-weight: 500;
+    }
+
+    .score-badge {
+      font-size: 3.5rem;
+      font-weight: 900;
+      padding: 10px 25px;
+      border-radius: var(--radius);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      line-height: 1;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .score-badge span {
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 4px;
+      opacity: 0.85;
+    }
+
+    .score-good { background-color: var(--success); color: white; }
+    .score-average { background-color: var(--warning); color: white; }
+    .score-poor { background-color: var(--danger); color: white; }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      margin-bottom: 45px;
+    }
+    
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+      transition: var(--transition);
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+    }
+    
+    .stat-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+
+    .icon-pages { background: rgba(30, 94, 133, 0.1); color: var(--primary); }
+    .icon-errors { background: rgba(220, 38, 38, 0.1); color: var(--danger); }
+    .icon-warnings { background: rgba(245, 158, 11, 0.1); color: var(--warning); }
+    
+    .stat-details h3 {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+    
+    .stat-number {
+      font-size: 1.6rem;
+      font-weight: 800;
+    }
+    
+    .dashboard-layout {
+      display: grid;
+      grid-template-columns: 2.8fr 1.2fr;
+      gap: 30px;
+    }
+    
+    @media (max-width: 900px) {
+      .dashboard-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .sidebar {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 25px;
+      align-self: start;
+      position: sticky;
+      top: 20px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+    }
+
+    .sidebar-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--bg);
+    }
+
+    .sidebar-list {
+      max-height: 500px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .sidebar-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg);
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .sidebar-item:hover {
+      border-color: var(--primary-light);
+      background: white;
+    }
+
+    .sidebar-file-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badge {
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .badge-success { background: rgba(16, 185, 129, 0.15); color: var(--success); }
+    .badge-warning { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
+    .badge-danger { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
+
+    .page-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+      transition: var(--transition);
+      scroll-margin-top: 20px;
+    }
+
+    .page-card:hover {
+      box-shadow: 0 8px 30px rgba(11, 61, 92, 0.05);
+    }
+
+    .page-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 15px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 20px;
+    }
+
+    .page-card-header h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .page-meta-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 25px;
+      background: var(--bg);
+      padding: 20px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+    }
+
+    .meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .meta-item.full-width {
+      grid-column: span 2;
+    }
+
+    @media (max-width: 600px) {
+      .meta-item.full-width, .page-meta-grid {
+        grid-template-columns: 1fr;
+        grid-column: span 1;
+      }
+    }
+
+    .meta-item strong {
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.5px;
+    }
+
+    .meta-val {
+      font-weight: 500;
+      word-break: break-all;
+    }
+
+    .text-danger {
+      color: var(--danger);
+      font-weight: 600;
+    }
+
+    .issues-section {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .issue-group h3 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .issue-group.collapsed h3 {
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .toggle-icon {
+      font-size: 0.75rem;
+      transition: transform 0.2s;
+    }
+
+    .issue-group.expanded .toggle-icon {
+      transform: rotate(90deg);
+    }
+
+    .issue-item {
+      padding: 12px 16px;
+      border-left: 4px solid;
+      background: var(--bg);
+      border-radius: 0 8px 8px 0;
+      margin-bottom: 8px;
+      font-size: 0.85rem;
+    }
+
+    .issue-error {
+      border-left-color: var(--danger);
+      background: rgba(239, 68, 68, 0.02);
+    }
+
+    .issue-warning {
+      border-left-color: var(--warning);
+      background: rgba(245, 158, 11, 0.02);
+    }
+
+    .issue-passed {
+      border-left-color: var(--success);
+      background: rgba(16, 185, 129, 0.02);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .issue-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 4px;
+    }
+
+    .issue-badge {
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    .issue-message {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .passed-list {
+      margin-top: 8px;
+    }
+  </style>
+  <script>
+    function scrollToPage(id) {
+      const el = document.getElementById('page-' + id);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    function togglePassed(header) {
+      const parent = header.parentElement;
+      const list = parent.querySelector('.passed-list');
+      const icon = parent.querySelector('.toggle-icon');
+      
+      if (list.style.display === 'none') {
+        list.style.display = 'block';
+        parent.classList.add('expanded');
+        icon.innerText = '▼';
+      } else {
+        list.style.display = 'none';
+        parent.classList.remove('expanded');
+        icon.innerText = '▶';
+      }
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="header-top">
+        <div>
+          <div class="header-logo">SEO GENERATOR SUITE</div>
+          <h1>Laporan Audit Proyek</h1>
+          <p class="subtitle">Delta Tour Static HTML Optimization & Generation Report</p>
+          <span class="meta-time">Dihasilkan pada: 1 Juli 2026 pukul 04.16</span>
+        </div>
+        <div class="score-badge score-poor">
+          5
+          <span>Score</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon icon-pages">📁</div>
+        <div class="stat-details">
+          <h3>Total Halaman</h3>
+          <p class="stat-number">17</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon icon-errors">⚠️</div>
+        <div class="stat-details">
+          <h3>Critical Errors</h3>
+          <p class="stat-number" style="color: var(--danger)">0</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon icon-warnings">💡</div>
+        <div class="stat-details">
+          <h3>Optimizations</h3>
+          <p class="stat-number" style="color: var(--warning)">38</p>
+        </div>
+      </div>
+    </main>
+
+    <div class="dashboard-layout">
+      <div class="content-area">
+        
+      <section class="page-card" id="page-detail-baluran.html">
+        <div class="page-card-header">
+          <h2>📄 detail-baluran.html</h2>
+          <span class="badge badge-warning">2 Issues</span>
+        </div>
+        
+        <div class="page-meta-grid">
+          <div class="meta-item">
+            <strong>Title:</strong>
+            <span class="meta-val ">Detail Paket Baluran Banyuwangi 2D1N | Delta Tour</span>
+          </div>
+          <div class="meta-item">
+            <strong>Canonical URL:</strong>
+            <span class="meta-val ">https://delta-tour.vercel.app/detail-baluran.html</span>
+          </div>
+          <div class="meta-item full-width">
+            <strong>Meta Description:</strong>
+            <span class="meta-val ">Detail paket Baluran Banyuwangi 2 Hari 1 Malam bersama Delta Tour. Jelajahi Savana Bekol, Pantai Bama, Mangrove Trail, dan Hutan De Djawatan dari Jember.</span>
+          </div>
+        </div>
+
+        <div class="issues-section">
+          
+          <div class="issue-group"><h3>Optimizations</h3>
+        <div class="issue-item issue-warning">
+          <div class="issue-header">
+            <span class="issue-badge badge-warning">Canonical URL Mismatch</span>
+          </div>
+          <p class="issue-message">URL canonical saat ini (https://delta-tour.vercel.app/detail-baluran.html) tidak sesuai dengan domain utama (https://www.deltatour.my.id/detail-baluran.html).</p>
+        </div>
+      
+        <div class="issue-item issue-warning">
+          <div class="issue-header">
+            <span class="issue-badge badge-warning">Empty Alt Attribute</span>
+          </div>
+          <p class="issue-message">Terdapat 2 tag <img> dengan atribut 'alt' kosong ("").</p>
+        </div>
+      </div>
+          <div class="issue-group collapsed"><h3 onclick="togglePassed(this)">Passed Checks (4) <span class="toggle-icon">▶</span></h3><div class="passed-list" style="display:none">
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Judul halaman memiliki panjang optimal.</span>
+          </div>
+        </div>
+      
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Judul halaman bersifat unik.</span>
+          </div>
+        </div>
+      
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Deskripsi meta memiliki panjang optimal.</span>
+          </div>
+        </div>
+      
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Deskripsi meta bersifat unik.</span>
+          </div>
+        </div>
+      </div></div>
+        </div>
+      </section>
+    
+      <section class="page-card" id="page-detail-banyuwangi.html">
+        <div class="page-card-header">
+          <h2>📄 detail-banyuwangi.html</h2>
+          <span class="badge badge-warning">2 Issues</span>
+        </div>
+        
+        <div class="page-meta-grid">
+          <div class="meta-item">
+            <strong>Title:</strong>
+            <span class="meta-val ">Detail Paket Banyuwangi 2D1N | Delta Tour</span>
+          </div>
+          <div class="meta-item">
+            <strong>Canonical URL:</strong>
+            <span class="meta-val ">https://delta-tour.vercel.app/detail-banyuwangi.html</span>
+          </div>
+          <div class="meta-item full-width">
+            <strong>Meta Description:</strong>
+            <span class="meta-val ">Detail paket wisata Banyuwangi 2 Hari 1 Malam bersama Delta Tour. Jelajahi Kawah Ijen (Blue Fire), Hutan De Djawatan, dan Pantai Pulau Merah dari Jember.</span>
+          </div>
+        </div>
+
+        <div class="issues-section">
+          
+          <div class="issue-group"><h3>Optimizations</h3>
+        <div class="issue-item issue-warning">
+          <div class="issue-header">
+            <span class="issue-badge badge-warning">Canonical URL Mismatch</span>
+          </div>
+          <p class="issue-message">URL canonical saat ini (https://delta-tour.vercel.app/detail-banyuwangi.html) tidak sesuai dengan domain utama (https://www.deltatour.my.id/detail-banyuwangi.html).</p>
+        </div>
+      
+        <div class="issue-item issue-warning">
+          <div class="issue-header">
+            <span class="issue-badge badge-warning">Empty Alt Attribute</span>
+          </div>
+          <p class="issue-message">Terdapat 2 tag <img> dengan atribut 'alt' kosong ("").</p>
+        </div>
+      </div>
+          <div class="issue-group collapsed"><h3 onclick="togglePassed(this)">Passed Checks (4) <span class="toggle-icon">▶</span></h3><div class="passed-list" style="display:none">
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Judul halaman memiliki panjang optimal.</span>
+          </div>
+        </div>
+      
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Judul halaman bersifat unik.</span>
+          </div>
+        </div>
+      
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Deskripsi meta memiliki panjang optimal.</span>
+          </div>
+        </div>
+      
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Deskripsi meta bersifat unik.</span>
+          </div>
+        </div>
+      </div></div>
+        </div>
+      </section>
+    
+      <section class="page-card" id="page-detail-bromo-midnight.html">
+        <div class="page-card-header">
+          <h2>📄 detail-bromo-midnight.html</h2>
+          <span class="badge badge-warning">2 Issues</span>
+        </div>
+        
+        <div class="page-meta-grid">
+          <div class="meta-item">
+            <strong>Title:</strong>
+            <span class="meta-val ">Detail Paket Bromo Midnight dari Jember | Delta Tour</span>
+          </div>
+          <div class="meta-item">
+            <strong>Canonical URL:</strong>
+            <span class="meta-val ">https://delta-tour.vercel.app/detail-bromo-midnight.html</span>
+          </div>
+          <div class="meta-item full-width">
+            <strong>Meta Description:</strong>
+            <span class="meta-val ">Detail paket Bromo Midnight dari Jember bersama Delta Tour, lengkap dengan itinerary, fasilitas, dan tombol konsultasi WhatsApp.</span>
+          </div>
+        </div>
+
+        <div class="issues-section">
+          
+          <div class="issue-group"><h3>Optimizations</h3>
+        <div class="issue-item issue-warning">
+          <div class="issue-header">
+            <span class="issue-badge badge-warning">Canonical URL Mismatch</span>
+          </div>
+          <p class="issue-message">URL canonical saat ini (https://delta-tour.vercel.app/detail-bromo-midnight.html) tidak sesuai dengan domain utama (https://www.deltatour.my.id/detail-bromo-midnight.html).</p>
+        </div>
+      
+        <div class="issue-item issue-warning">
+          <div class="issue-header">
+            <span class="issue-badge badge-warning">Empty Alt Attribute</span>
+          </div>
+          <p class="issue-message">Terdapat 2 tag <img> dengan atribut 'alt' kosong ("").</p>
+        </div>
+      </div>
+          <div class="issue-group collapsed"><h3 onclick="togglePassed(this)">Passed Checks (4) <span class="toggle-icon">▶</span></h3><div class="passed-list" style="display:none">
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Judul halaman memiliki panjang optimal.</span>
+          </div>
+        </div>
+      
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Judul halaman bersifat unik.</span>
+          </div>
+        </div>
+      
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Deskripsi meta memiliki panjang optimal.</span>
+          </div>
+        </div>
+      
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Deskripsi meta bersifat unik.</span>
+          </div>
+        </div>
+      </div></div>
+        </div>
+      </section>
+    
+      <section class="page-card" id="page-detail-custom.html">
+        <div class="page-card-header">
+          <h2>📄 detail-custom.html</h2>
+          <span class="badge badge-warning">3 Issues</span>
+        </div>
+        
+        <div class="page-meta-grid">
+          <div class="meta-item">
+            <strong>Title:</strong>
+            <span class="meta-val ">Detail Custom Trip Jawa Timur | Delta Tour</span>
+          </div>
+          <div class="meta-item">
+            <strong>Canonical URL:</strong>
+            <span class="meta-val ">https://delta-tour.vercel.app/detail-custom.html</span>
+          </div>
+          <div class="meta-item full-width">
+            <strong>Meta Description:</strong>
+            <span class="meta-val ">Rencanakan custom trip Anda di Jawa Timur (Bromo, Ijen, Banyuwangi, Lumajang, Jember) bersama Delta Tour. Konsultasikan rute, durasi, dan budget perjalanan gratis.</span>
+          </div>
+        </div>
+
+        <div class="issues-section">
+          
+          <div class="issue-group"><h3>Optimizations</h3>
+        <div class="issue-item issue-warning">
+          <div class="issue-header">
+            <span class="issue-badge badge-warning">Meta Description Too Long</span>
+          </div>
+          <p class="issue-message">Deskripsi meta terlalu panjang (163 karakter). Target ideal: 120-160 karakter.</p>
+        </div>
+      
+        <div class="issue-item issue-warning">
+          <div class="issue-header">
+            <span class="issue-badge badge-warning">Canonical URL Mismatch</span>
+          </div>
+          <p class="issue-message">URL canonical saat ini (https://delta-tour.vercel.app/detail-custom.html) tidak sesuai dengan domain utama (https://www.deltatour.my.id/detail-custom.html).</p>
+        </div>
+      
+        <div class="issue-item issue-warning">
+          <div class="issue-header">
+            <span class="issue-badge badge-warning">Empty Alt Attribute</span>
+          </div>
+          <p class="issue-message">Terdapat 2 tag <img> dengan atribut 'alt' kosong ("").</p>
+        </div>
+      </div>
+          <div class="issue-group collapsed"><h3 onclick="togglePassed(this)">Passed Checks (3) <span class="toggle-icon">▶</span></h3><div class="passed-list" style="display:none">
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Judul halaman memiliki panjang optimal.</span>
+          </div>
+        </div>
+      
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Judul halaman bersifat unik.</span>
+          </div>
+        </div>
+      
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Deskripsi meta bersifat unik.</span>
+          </div>
+        </div>
+      </div></div>
+        </div>
+      </section>
+    
+      <section class="page-card" id="page-detail-jember-beach.html">
+        <div class="page-card-header">
+          <h2>📄 detail-jember-beach.html</h2>
+          <span class="badge badge-warning">2 Issues</span>
+        </div>
+        
+        <div class="page-meta-grid">
+          <div class="meta-item">
+            <strong>Title:</strong>
+            <span class="meta-val ">Detail Paket Jember Beach Tour | Delta Tour</span>
+          </div>
+          <div class="meta-item">
+            <strong>Canonical URL:</strong>
+            <span class="meta-val ">https://delta-tour.vercel.app/detail-jember-beach.html</span>
+          </div>
+          <div class="meta-item full-width">
+            <strong>Meta Description:</strong>
+            <span class="meta-val ">Detail paket Jember Beach Tour bersama Delta Tour. Jelajahi Pantai Tanjung Papuma, Watu Ulo, Payangan, Teluk Love dalam satu hari keberangkatan Jember.</span>
+          </div>
+        </div>
+
+        <div class="issues-section">
+          
+          <div class="issue-group"><h3>Optimizations</h3>
+        <div class="issue-item issue-warning">
+          <div class="issue-header">
+            <span class="issue-badge badge-warning">Canonical URL Mismatch</span>
+          </div>
+          <p class="issue-message">URL canonical saat ini (https://delta-tour.vercel.app/detail-jember-beach.html) tidak sesuai dengan domain utama (https://www.deltatour.my.id/detail-jember-beach.html).</p>
+        </div>
+      
+        <div class="issue-item issue-warning">
+          <div class="issue-header">
+            <span class="issue-badge badge-warning">Empty Alt Attribute</span>
+          </div>
+          <p class="issue-message">Terdapat 2 tag <img> dengan atribut 'alt' kosong ("").</p>
+        </div>
+      </div>
+          <div class="issue-group collapsed"><h3 onclick="togglePassed(this)">Passed Checks (4) <span class="toggle-icon">▶</span></h3><div class="passed-list" style="display:none">
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Judul halaman memiliki panjang optimal.</span>
+          </div>
+        </div>
+      
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Judul halaman bersifat unik.</span>
+          </div>
+        </div>
+      
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Deskripsi meta memiliki panjang optimal.</span>
+          </div>
+        </div>
+      
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Deskripsi meta bersifat unik.</span>
+          </div>
+        </div>
+      </div></div>
+        </div>
+      </section>
+    
+      <section class="page-card" id="page-detail-jember-family.html">
+        <div class="page-card-header">
+          <h2>📄 detail-jember-family.html</h2>
+          <span class="badge badge-warning">2 Issues</span>
+        </div>
+        
+        <div class="page-meta-grid">
+          <div class="meta-item">
+            <strong>Title:</strong>
+            <span class="meta-val ">Detail Paket Jember Family Tour | Delta Tour</span>
+          </div>
+          <div class="meta-item">
+            <strong>Canonical URL:</strong>
+            <span class="meta-val ">https://delta-tour.vercel.app/detail-jember-family.html</span>
+          </div>
+          <div class="meta-item full-width">
+            <strong>Meta Description:</strong>
+            <span class="meta-val ">Detail paket Jember Family Tour bersama Delta Tour. Nikmati liburan seru keluarga ke Rembangan, Taman Botani Sukorambi, Alun-Alun Jember, dan pusat oleh-oleh.</span>
+          </div>
+        </div>
+
+        <div class="issues-section">
+          
+          <div class="issue-group"><h3>Optimizations</h3>
+        <div class="issue-item issue-warning">
+          <div class="issue-header">
+            <span class="issue-badge badge-warning">Canonical URL Mismatch</span>
+          </div>
+          <p class="issue-message">URL canonical saat ini (https://delta-tour.vercel.app/detail-jember-family.html) tidak sesuai dengan domain utama (https://www.deltatour.my.id/detail-jember-family.html).</p>
+        </div>
+      
+        <div class="issue-item issue-warning">
+          <div class="issue-header">
+            <span class="issue-badge badge-warning">Empty Alt Attribute</span>
+          </div>
+          <p class="issue-message">Terdapat 2 tag <img> dengan atribut 'alt' kosong ("").</p>
+        </div>
+      </div>
+          <div class="issue-group collapsed"><h3 onclick="togglePassed(this)">Passed Checks (4) <span class="toggle-icon">▶</span></h3><div class="passed-list" style="display:none">
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Judul halaman memiliki panjang optimal.</span>
+          </div>
+        </div>
+      
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Judul halaman bersifat unik.</span>
+          </div>
+        </div>
+      
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Deskripsi meta memiliki panjang optimal.</span>
+          </div>
+        </div>
+      
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Deskripsi meta bersifat unik.</span>
+          </div>
+        </div>
+      </div></div>
+        </div>
+      </section>
+    
+      <section class="page-card" id="page-detail-kawah-ijen.html">
+        <div class="page-card-header">
+          <h2>📄 detail-kawah-ijen.html</h2>
+          <span class="badge badge-warning">2 Issues</span>
+        </div>
+        
+        <div class="page-meta-grid">
+          <div class="meta-item">
+            <strong>Title:</strong>
+            <span class="meta-val ">Detail Paket Kawah Ijen dari Jember | Delta Tour</span>
+          </div>
+          <div class="meta-item">
+            <strong>Canonical URL:</strong>
+            <span class="meta-val ">https://delta-tour.vercel.app/detail-kawah-ijen.html</span>
+          </div>
+          <div class="meta-item full-width">
+            <strong>Meta Description:</strong>
+            <span class="meta-val ">Detail paket Kawah Ijen Midnight dari Jember bersama Delta Tour. Lihat itinerary Blue Fire, Kawah Ijen, sunrise point, fasilitas, dan tombol booking.</span>
+          </div>
+        </div>
+
+        <div class="issues-section">
+          
+          <div class="issue-group"><h3>Optimizations</h3>
+        <div class="issue-item issue-warning">
+          <div class="issue-header">
+            <span class="issue-badge badge-warning">Canonical URL Mismatch</span>
+          </div>
+          <p class="issue-message">URL canonical saat ini (https://delta-tour.vercel.app/detail-kawah-ijen.html) tidak sesuai dengan domain utama (https://www.deltatour.my.id/detail-kawah-ijen.html).</p>
+        </div>
+      
+        <div class="issue-item issue-warning">
+          <div class="issue-header">
+            <span class="issue-badge badge-warning">Empty Alt Attribute</span>
+          </div>
+          <p class="issue-message">Terdapat 2 tag <img> dengan atribut 'alt' kosong ("").</p>
+        </div>
+      </div>
+          <div class="issue-group collapsed"><h3 onclick="togglePassed(this)">Passed Checks (4) <span class="toggle-icon">▶</span></h3><div class="passed-list" style="display:none">
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Judul halaman memiliki panjang optimal.</span>
+          </div>
+        </div>
+      
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Judul halaman bersifat unik.</span>
+          </div>
+        </div>
+      
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Deskripsi meta memiliki panjang optimal.</span>
+          </div>
+        </div>
+      
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Deskripsi meta bersifat unik.</span>
+          </div>
+        </div>
+      </div></div>
+        </div>
+      </section>
+    
+      <section class="page-card" id="page-detail-kawah-wurung.html">
+        <div class="page-card-header">
+          <h2>📄 detail-kawah-wurung.html</h2>
+          <span class="badge badge-warning">2 Issues</span>
+        </div>
+        
+        <div class="page-meta-grid">
+          <div class="meta-item">
+            <strong>Title:</strong>
+            <span class="meta-val ">Detail Paket Kawah Wurung Bondowoso | Delta Tour</span>
+          </div>
+          <div class="meta-item">
+            <strong>Canonical URL:</strong>
+            <span class="meta-val ">https://delta-tour.vercel.app/detail-kawah-wurung.html</span>
+          </div>
+          <div class="meta-item full-width">
+            <strong>Meta Description:</strong>
+            <span class="meta-val ">Detail paket wisata Kawah Wurung Bondowoso dari Jember bersama Delta Tour. Nikmati pemandangan sabana hijau, bukit cincin, dan petualangan alam seru.</span>
+          </div>
+        </div>
+
+        <div class="issues-section">
+          
+          <div class="issue-group"><h3>Optimizations</h3>
+        <div class="issue-item issue-warning">
+          <div class="issue-header">
+            <span class="issue-badge badge-warning">Canonical URL Mismatch</span>
+          </div>
+          <p class="issue-message">URL canonical saat ini (https://delta-tour.vercel.app/detail-kawah-wurung.html) tidak sesuai dengan domain utama (https://www.deltatour.my.id/detail-kawah-wurung.html).</p>
+        </div>
+      
+        <div class="issue-item issue-warning">
+          <div class="issue-header">
+            <span class="issue-badge badge-warning">Empty Alt Attribute</span>
+          </div>
+          <p class="issue-message">Terdapat 2 tag <img> dengan atribut 'alt' kosong ("").</p>
+        </div>
+      </div>
+          <div class="issue-group collapsed"><h3 onclick="togglePassed(this)">Passed Checks (4) <span class="toggle-icon">▶</span></h3><div class="passed-list" style="display:none">
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Judul halaman memiliki panjang optimal.</span>
+          </div>
+        </div>
+      
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Judul halaman bersifat unik.</span>
+          </div>
+        </div>
+      
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Deskripsi meta memiliki panjang optimal.</span>
+          </div>
+        </div>
+      
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Deskripsi meta bersifat unik.</span>
+          </div>
+        </div>
+      </div></div>
+        </div>
+      </section>
+    
+      <section class="page-card" id="page-detail-malang-batu.html">
+        <div class="page-card-header">
+          <h2>📄 detail-malang-batu.html</h2>
+          <span class="badge badge-warning">2 Issues</span>
+        </div>
+        
+        <div class="page-meta-grid">
+          <div class="meta-item">
+            <strong>Title:</strong>
+            <span class="meta-val ">Detail Paket Malang Batu Family Tour | Delta Tour</span>
+          </div>
+          <div class="meta-item">
+            <strong>Canonical URL:</strong>
+            <span class="meta-val ">https://delta-tour.vercel.app/detail-malang-batu.html</span>
+          </div>
+          <div class="meta-item full-width">
+            <strong>Meta Description:</strong>
+            <span class="meta-val ">Detail paket wisata keluarga Malang Batu 2 Hari 1 Malam bersama Delta Tour. Jelajahi Jatim Park, Museum Angkut, Coban Rondo, dan Alun-Alun Batu dari Jember.</span>
+          </div>
+        </div>
+
+        <div class="issues-section">
+          
+          <div class="issue-group"><h3>Optimizations</h3>
+        <div class="issue-item issue-warning">
+          <div class="issue-header">
+            <span class="issue-badge badge-warning">Canonical URL Mismatch</span>
+          </div>
+          <p class="issue-message">URL canonical saat ini (https://delta-tour.vercel.app/detail-malang-batu.html) tidak sesuai dengan domain utama (https://www.deltatour.my.id/detail-malang-batu.html).</p>
+        </div>
+      
+        <div class="issue-item issue-warning">
+          <div class="issue-header">
+            <span class="issue-badge badge-warning">Empty Alt Attribute</span>
+          </div>
+          <p class="issue-message">Terdapat 2 tag <img> dengan atribut 'alt' kosong ("").</p>
+        </div>
+      </div>
+          <div class="issue-group collapsed"><h3 onclick="togglePassed(this)">Passed Checks (4) <span class="toggle-icon">▶</span></h3><div class="passed-list" style="display:none">
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Judul halaman memiliki panjang optimal.</span>
+          </div>
+        </div>
+      
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Judul halaman bersifat unik.</span>
+          </div>
+        </div>
+      
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Deskripsi meta memiliki panjang optimal.</span>
+          </div>
+        </div>
+      
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Deskripsi meta bersifat unik.</span>
+          </div>
+        </div>
+      </div></div>
+        </div>
+      </section>
+    
+      <section class="page-card" id="page-detail-tumpak-sewu.html">
+        <div class="page-card-header">
+          <h2>📄 detail-tumpak-sewu.html</h2>
+          <span class="badge badge-warning">2 Issues</span>
+        </div>
+        
+        <div class="page-meta-grid">
+          <div class="meta-item">
+            <strong>Title:</strong>
+            <span class="meta-val ">Detail Paket Tumpak Sewu Lumajang | Delta Tour</span>
+          </div>
+          <div class="meta-item">
+            <strong>Canonical URL:</strong>
+            <span class="meta-val ">https://delta-tour.vercel.app/detail-tumpak-sewu.html</span>
+          </div>
+          <div class="meta-item full-width">
+            <strong>Meta Description:</strong>
+            <span class="meta-val ">Detail paket Tumpak Sewu Lumajang dari Jember bersama Delta Tour. Petualangan trekking ke dasar lembah air terjun tirai raksasa dan Goa Tetes Lumajang.</span>
+          </div>
+        </div>
+
+        <div class="issues-section">
+          
+          <div class="issue-group"><h3>Optimizations</h3>
+        <div class="issue-item issue-warning">
+          <div class="issue-header">
+            <span class="issue-badge badge-warning">Canonical URL Mismatch</span>
+          </div>
+          <p class="issue-message">URL canonical saat ini (https://delta-tour.vercel.app/detail-tumpak-sewu.html) tidak sesuai dengan domain utama (https://www.deltatour.my.id/detail-tumpak-sewu.html).</p>
+        </div>
+      
+        <div class="issue-item issue-warning">
+          <div class="issue-header">
+            <span class="issue-badge badge-warning">Empty Alt Attribute</span>
+          </div>
+          <p class="issue-message">Terdapat 2 tag <img> dengan atribut 'alt' kosong ("").</p>
+        </div>
+      </div>
+          <div class="issue-group collapsed"><h3 onclick="togglePassed(this)">Passed Checks (4) <span class="toggle-icon">▶</span></h3><div class="passed-list" style="display:none">
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Judul halaman memiliki panjang optimal.</span>
+          </div>
+        </div>
+      
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Judul halaman bersifat unik.</span>
+          </div>
+        </div>
+      
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Deskripsi meta memiliki panjang optimal.</span>
+          </div>
+        </div>
+      
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Deskripsi meta bersifat unik.</span>
+          </div>
+        </div>
+      </div></div>
+        </div>
+      </section>
+    
+      <section class="page-card" id="page-detail-wisata.html">
+        <div class="page-card-header">
+          <h2>📄 detail-wisata.html</h2>
+          <span class="badge badge-warning">3 Issues</span>
+        </div>
+        
+        <div class="page-meta-grid">
+          <div class="meta-item">
+            <strong>Title:</strong>
+            <span class="meta-val ">Detail Wisata | Delta Tour</span>
+          </div>
+          <div class="meta-item">
+            <strong>Canonical URL:</strong>
+            <span class="meta-val ">https://delta-tour.vercel.app/detail-wisata.html</span>
+          </div>
+          <div class="meta-item full-width">
+            <strong>Meta Description:</strong>
+            <span class="meta-val ">Detail destinasi wisata Delta Tour dari Jember, lengkap dengan ringkasan lokasi, daya tarik, rekomendasi rute, dan foto wisata.</span>
+          </div>
+        </div>
+
+        <div class="issues-section">
+          
+          <div class="issue-group"><h3>Optimizations</h3>
+        <div class="issue-item issue-warning">
+          <div class="issue-header">
+            <span class="issue-badge badge-warning">Title Too Short</span>
+          </div>
+          <p class="issue-message">Judul halaman terlalu pendek (26 karakter). Target ideal: 50-60 karakter.</p>
+        </div>
+      
+        <div class="issue-item issue-warning">
+          <div class="issue-header">
+            <span class="issue-badge badge-warning">Canonical URL Mismatch</span>
+          </div>
+          <p class="issue-message">URL canonical saat ini (https://delta-tour.vercel.app/detail-wisata.html) tidak sesuai dengan domain utama (https://www.deltatour.my.id/detail-wisata.html).</p>
+        </div>
+      
+        <div class="issue-item issue-warning">
+          <div class="issue-header">
+            <span class="issue-badge badge-warning">Empty Alt Attribute</span>
+          </div>
+          <p class="issue-message">Terdapat 2 tag <img> dengan atribut 'alt' kosong ("").</p>
+        </div>
+      </div>
+          <div class="issue-group collapsed"><h3 onclick="togglePassed(this)">Passed Checks (3) <span class="toggle-icon">▶</span></h3><div class="passed-list" style="display:none">
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Judul halaman bersifat unik.</span>
+          </div>
+        </div>
+      
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Deskripsi meta memiliki panjang optimal.</span>
+          </div>
+        </div>
+      
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Deskripsi meta bersifat unik.</span>
+          </div>
+        </div>
+      </div></div>
+        </div>
+      </section>
+    
+      <section class="page-card" id="page-galeri.html">
+        <div class="page-card-header">
+          <h2>📄 galeri.html</h2>
+          <span class="badge badge-warning">2 Issues</span>
+        </div>
+        
+        <div class="page-meta-grid">
+          <div class="meta-item">
+            <strong>Title:</strong>
+            <span class="meta-val ">Galeri Delta Tour | Dokumentasi Wisata Jawa Timur</span>
+          </div>
+          <div class="meta-item">
+            <strong>Canonical URL:</strong>
+            <span class="meta-val ">https://delta-tour.vercel.app/galeri.html</span>
+          </div>
+          <div class="meta-item full-width">
+            <strong>Meta Description:</strong>
+            <span class="meta-val ">Galeri perjalanan Delta Tour untuk destinasi Bromo, Bondowoso, Jember, Banyuwangi, Lumajang, Baluran, dan armada wisata.</span>
+          </div>
+        </div>
+
+        <div class="issues-section">
+          
+          <div class="issue-group"><h3>Optimizations</h3>
+        <div class="issue-item issue-warning">
+          <div class="issue-header">
+            <span class="issue-badge badge-warning">Canonical URL Mismatch</span>
+          </div>
+          <p class="issue-message">URL canonical saat ini (https://delta-tour.vercel.app/galeri.html) tidak sesuai dengan domain utama (https://www.deltatour.my.id/galeri.html).</p>
+        </div>
+      
+        <div class="issue-item issue-warning">
+          <div class="issue-header">
+            <span class="issue-badge badge-warning">Empty Alt Attribute</span>
+          </div>
+          <p class="issue-message">Terdapat 3 tag <img> dengan atribut 'alt' kosong ("").</p>
+        </div>
+      </div>
+          <div class="issue-group collapsed"><h3 onclick="togglePassed(this)">Passed Checks (4) <span class="toggle-icon">▶</span></h3><div class="passed-list" style="display:none">
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Judul halaman memiliki panjang optimal.</span>
+          </div>
+        </div>
+      
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Judul halaman bersifat unik.</span>
+          </div>
+        </div>
+      
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Deskripsi meta memiliki panjang optimal.</span>
+          </div>
+        </div>
+      
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Deskripsi meta bersifat unik.</span>
+          </div>
+        </div>
+      </div></div>
+        </div>
+      </section>
+    
+      <section class="page-card" id="page-index.html">
+        <div class="page-card-header">
+          <h2>📄 index.html</h2>
+          <span class="badge badge-warning">3 Issues</span>
+        </div>
+        
+        <div class="page-meta-grid">
+          <div class="meta-item">
+            <strong>Title:</strong>
+            <span class="meta-val ">Delta Tour | Paket Wisata Jawa Timur dari Jember</span>
+          </div>
+          <div class="meta-item">
+            <strong>Canonical URL:</strong>
+            <span class="meta-val ">https://delta-tour.vercel.app/</span>
+          </div>
+          <div class="meta-item full-width">
+            <strong>Meta Description:</strong>
+            <span class="meta-val ">Delta Tour melayani paket wisata Bromo, Kawah Ijen, Kawah Wurung Bondowoso, Banyuwangi, Lumajang, Baluran, wisata Jember, dan sewa mobil dengan driver berpengalaman dari Jember.</span>
+          </div>
+        </div>
+
+        <div class="issues-section">
+          
+          <div class="issue-group"><h3>Optimizations</h3>
+        <div class="issue-item issue-warning">
+          <div class="issue-header">
+            <span class="issue-badge badge-warning">Meta Description Too Long</span>
+          </div>
+          <p class="issue-message">Deskripsi meta terlalu panjang (177 karakter). Target ideal: 120-160 karakter.</p>
+        </div>
+      
+        <div class="issue-item issue-warning">
+          <div class="issue-header">
+            <span class="issue-badge badge-warning">Canonical URL Mismatch</span>
+          </div>
+          <p class="issue-message">URL canonical saat ini (https://delta-tour.vercel.app/) tidak sesuai dengan domain utama (https://www.deltatour.my.id/).</p>
+        </div>
+      
+        <div class="issue-item issue-warning">
+          <div class="issue-header">
+            <span class="issue-badge badge-warning">Empty Alt Attribute</span>
+          </div>
+          <p class="issue-message">Terdapat 2 tag <img> dengan atribut 'alt' kosong ("").</p>
+        </div>
+      </div>
+          <div class="issue-group collapsed"><h3 onclick="togglePassed(this)">Passed Checks (3) <span class="toggle-icon">▶</span></h3><div class="passed-list" style="display:none">
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Judul halaman memiliki panjang optimal.</span>
+          </div>
+        </div>
+      
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Judul halaman bersifat unik.</span>
+          </div>
+        </div>
+      
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Deskripsi meta bersifat unik.</span>
+          </div>
+        </div>
+      </div></div>
+        </div>
+      </section>
+    
+      <section class="page-card" id="page-kontak.html">
+        <div class="page-card-header">
+          <h2>📄 kontak.html</h2>
+          <span class="badge badge-warning">2 Issues</span>
+        </div>
+        
+        <div class="page-meta-grid">
+          <div class="meta-item">
+            <strong>Title:</strong>
+            <span class="meta-val ">Hubungi Delta Tour | WhatsApp Travel Jember</span>
+          </div>
+          <div class="meta-item">
+            <strong>Canonical URL:</strong>
+            <span class="meta-val ">https://delta-tour.vercel.app/kontak.html</span>
+          </div>
+          <div class="meta-item full-width">
+            <strong>Meta Description:</strong>
+            <span class="meta-val ">Hubungi Delta Tour via WhatsApp untuk konsultasi paket wisata Jawa Timur dari Jember, sewa mobil, private trip, open trip, dan custom trip.</span>
+          </div>
+        </div>
+
+        <div class="issues-section">
+          
+          <div class="issue-group"><h3>Optimizations</h3>
+        <div class="issue-item issue-warning">
+          <div class="issue-header">
+            <span class="issue-badge badge-warning">Canonical URL Mismatch</span>
+          </div>
+          <p class="issue-message">URL canonical saat ini (https://delta-tour.vercel.app/kontak.html) tidak sesuai dengan domain utama (https://www.deltatour.my.id/kontak.html).</p>
+        </div>
+      
+        <div class="issue-item issue-warning">
+          <div class="issue-header">
+            <span class="issue-badge badge-warning">Empty Alt Attribute</span>
+          </div>
+          <p class="issue-message">Terdapat 2 tag <img> dengan atribut 'alt' kosong ("").</p>
+        </div>
+      </div>
+          <div class="issue-group collapsed"><h3 onclick="togglePassed(this)">Passed Checks (4) <span class="toggle-icon">▶</span></h3><div class="passed-list" style="display:none">
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Judul halaman memiliki panjang optimal.</span>
+          </div>
+        </div>
+      
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Judul halaman bersifat unik.</span>
+          </div>
+        </div>
+      
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Deskripsi meta memiliki panjang optimal.</span>
+          </div>
+        </div>
+      
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Deskripsi meta bersifat unik.</span>
+          </div>
+        </div>
+      </div></div>
+        </div>
+      </section>
+    
+      <section class="page-card" id="page-paket.html">
+        <div class="page-card-header">
+          <h2>📄 paket.html</h2>
+          <span class="badge badge-warning">3 Issues</span>
+        </div>
+        
+        <div class="page-meta-grid">
+          <div class="meta-item">
+            <strong>Title:</strong>
+            <span class="meta-val ">Paket Wisata Delta Tour | Travel Jawa Timur dari Jember</span>
+          </div>
+          <div class="meta-item">
+            <strong>Canonical URL:</strong>
+            <span class="meta-val ">https://delta-tour.vercel.app/paket.html</span>
+          </div>
+          <div class="meta-item full-width">
+            <strong>Meta Description:</strong>
+            <span class="meta-val ">Pilih paket wisata Jawa Timur dari Jember bersama Delta Tour: Bromo, Bondowoso, Kawah Ijen, Kawah Wurung, Banyuwangi, Lumajang, Baluran, wisata Jember, dan custom trip.</span>
+          </div>
+        </div>
+
+        <div class="issues-section">
+          
+          <div class="issue-group"><h3>Optimizations</h3>
+        <div class="issue-item issue-warning">
+          <div class="issue-header">
+            <span class="issue-badge badge-warning">Meta Description Too Long</span>
+          </div>
+          <p class="issue-message">Deskripsi meta terlalu panjang (168 karakter). Target ideal: 120-160 karakter.</p>
+        </div>
+      
+        <div class="issue-item issue-warning">
+          <div class="issue-header">
+            <span class="issue-badge badge-warning">Canonical URL Mismatch</span>
+          </div>
+          <p class="issue-message">URL canonical saat ini (https://delta-tour.vercel.app/paket.html) tidak sesuai dengan domain utama (https://www.deltatour.my.id/paket.html).</p>
+        </div>
+      
+        <div class="issue-item issue-warning">
+          <div class="issue-header">
+            <span class="issue-badge badge-warning">Empty Alt Attribute</span>
+          </div>
+          <p class="issue-message">Terdapat 2 tag <img> dengan atribut 'alt' kosong ("").</p>
+        </div>
+      </div>
+          <div class="issue-group collapsed"><h3 onclick="togglePassed(this)">Passed Checks (3) <span class="toggle-icon">▶</span></h3><div class="passed-list" style="display:none">
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Judul halaman memiliki panjang optimal.</span>
+          </div>
+        </div>
+      
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Judul halaman bersifat unik.</span>
+          </div>
+        </div>
+      
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Deskripsi meta bersifat unik.</span>
+          </div>
+        </div>
+      </div></div>
+        </div>
+      </section>
+    
+      <section class="page-card" id="page-sewa-mobil.html">
+        <div class="page-card-header">
+          <h2>📄 sewa-mobil.html</h2>
+          <span class="badge badge-warning">2 Issues</span>
+        </div>
+        
+        <div class="page-meta-grid">
+          <div class="meta-item">
+            <strong>Title:</strong>
+            <span class="meta-val ">Sewa Mobil + Driver dari Jember | Delta Tour</span>
+          </div>
+          <div class="meta-item">
+            <strong>Canonical URL:</strong>
+            <span class="meta-val ">https://delta-tour.vercel.app/sewa-mobil.html</span>
+          </div>
+          <div class="meta-item full-width">
+            <strong>Meta Description:</strong>
+            <span class="meta-val ">Sewa mobil + driver dari Jember untuk perjalanan wisata, keluarga, rombongan, dan custom trip Jawa Timur bersama Delta Tour.</span>
+          </div>
+        </div>
+
+        <div class="issues-section">
+          
+          <div class="issue-group"><h3>Optimizations</h3>
+        <div class="issue-item issue-warning">
+          <div class="issue-header">
+            <span class="issue-badge badge-warning">Canonical URL Mismatch</span>
+          </div>
+          <p class="issue-message">URL canonical saat ini (https://delta-tour.vercel.app/sewa-mobil.html) tidak sesuai dengan domain utama (https://www.deltatour.my.id/sewa-mobil.html).</p>
+        </div>
+      
+        <div class="issue-item issue-warning">
+          <div class="issue-header">
+            <span class="issue-badge badge-warning">Empty Alt Attribute</span>
+          </div>
+          <p class="issue-message">Terdapat 2 tag <img> dengan atribut 'alt' kosong ("").</p>
+        </div>
+      </div>
+          <div class="issue-group collapsed"><h3 onclick="togglePassed(this)">Passed Checks (4) <span class="toggle-icon">▶</span></h3><div class="passed-list" style="display:none">
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Judul halaman memiliki panjang optimal.</span>
+          </div>
+        </div>
+      
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Judul halaman bersifat unik.</span>
+          </div>
+        </div>
+      
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Deskripsi meta memiliki panjang optimal.</span>
+          </div>
+        </div>
+      
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Deskripsi meta bersifat unik.</span>
+          </div>
+        </div>
+      </div></div>
+        </div>
+      </section>
+    
+      <section class="page-card" id="page-tentang.html">
+        <div class="page-card-header">
+          <h2>📄 tentang.html</h2>
+          <span class="badge badge-warning">2 Issues</span>
+        </div>
+        
+        <div class="page-meta-grid">
+          <div class="meta-item">
+            <strong>Title:</strong>
+            <span class="meta-val ">Tentang Delta Tour | Travel Jember Jawa Timur</span>
+          </div>
+          <div class="meta-item">
+            <strong>Canonical URL:</strong>
+            <span class="meta-val ">https://delta-tour.vercel.app/tentang.html</span>
+          </div>
+          <div class="meta-item full-width">
+            <strong>Meta Description:</strong>
+            <span class="meta-val ">Delta Tour adalah layanan travel berbasis di Jember untuk paket wisata, private trip, open trip, custom trip, dan sewa mobil dengan driver.</span>
+          </div>
+        </div>
+
+        <div class="issues-section">
+          
+          <div class="issue-group"><h3>Optimizations</h3>
+        <div class="issue-item issue-warning">
+          <div class="issue-header">
+            <span class="issue-badge badge-warning">Canonical URL Mismatch</span>
+          </div>
+          <p class="issue-message">URL canonical saat ini (https://delta-tour.vercel.app/tentang.html) tidak sesuai dengan domain utama (https://www.deltatour.my.id/tentang.html).</p>
+        </div>
+      
+        <div class="issue-item issue-warning">
+          <div class="issue-header">
+            <span class="issue-badge badge-warning">Empty Alt Attribute</span>
+          </div>
+          <p class="issue-message">Terdapat 2 tag <img> dengan atribut 'alt' kosong ("").</p>
+        </div>
+      </div>
+          <div class="issue-group collapsed"><h3 onclick="togglePassed(this)">Passed Checks (4) <span class="toggle-icon">▶</span></h3><div class="passed-list" style="display:none">
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Judul halaman memiliki panjang optimal.</span>
+          </div>
+        </div>
+      
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Judul halaman bersifat unik.</span>
+          </div>
+        </div>
+      
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Deskripsi meta memiliki panjang optimal.</span>
+          </div>
+        </div>
+      
+        <div class="issue-item issue-passed">
+          <div class="issue-header">
+            <span class="issue-badge badge-success">Passed</span>
+            <span class="issue-message">Deskripsi meta bersifat unik.</span>
+          </div>
+        </div>
+      </div></div>
+        </div>
+      </section>
+    
+      </div>
+      
+      <div class="sidebar">
+        <div class="sidebar-title">Daftar File</div>
+        <div class="sidebar-list">
+          
+      <div class="sidebar-item" onclick="scrollToPage('detail-baluran.html')">
+        <div class="sidebar-file-info">
+          <span class="file-icon">📄</span>
+          <span class="file-name">detail-baluran.html</span>
+        </div>
+        <span class="badge badge-warning">2 Issues</span>
+      </div>
+    
+      <div class="sidebar-item" onclick="scrollToPage('detail-banyuwangi.html')">
+        <div class="sidebar-file-info">
+          <span class="file-icon">📄</span>
+          <span class="file-name">detail-banyuwangi.html</span>
+        </div>
+        <span class="badge badge-warning">2 Issues</span>
+      </div>
+    
+      <div class="sidebar-item" onclick="scrollToPage('detail-bromo-midnight.html')">
+        <div class="sidebar-file-info">
+          <span class="file-icon">📄</span>
+          <span class="file-name">detail-bromo-midnight.html</span>
+        </div>
+        <span class="badge badge-warning">2 Issues</span>
+      </div>
+    
+      <div class="sidebar-item" onclick="scrollToPage('detail-custom.html')">
+        <div class="sidebar-file-info">
+          <span class="file-icon">📄</span>
+          <span class="file-name">detail-custom.html</span>
+        </div>
+        <span class="badge badge-warning">3 Issues</span>
+      </div>
+    
+      <div class="sidebar-item" onclick="scrollToPage('detail-jember-beach.html')">
+        <div class="sidebar-file-info">
+          <span class="file-icon">📄</span>
+          <span class="file-name">detail-jember-beach.html</span>
+        </div>
+        <span class="badge badge-warning">2 Issues</span>
+      </div>
+    
+      <div class="sidebar-item" onclick="scrollToPage('detail-jember-family.html')">
+        <div class="sidebar-file-info">
+          <span class="file-icon">📄</span>
+          <span class="file-name">detail-jember-family.html</span>
+        </div>
+        <span class="badge badge-warning">2 Issues</span>
+      </div>
+    
+      <div class="sidebar-item" onclick="scrollToPage('detail-kawah-ijen.html')">
+        <div class="sidebar-file-info">
+          <span class="file-icon">📄</span>
+          <span class="file-name">detail-kawah-ijen.html</span>
+        </div>
+        <span class="badge badge-warning">2 Issues</span>
+      </div>
+    
+      <div class="sidebar-item" onclick="scrollToPage('detail-kawah-wurung.html')">
+        <div class="sidebar-file-info">
+          <span class="file-icon">📄</span>
+          <span class="file-name">detail-kawah-wurung.html</span>
+        </div>
+        <span class="badge badge-warning">2 Issues</span>
+      </div>
+    
+      <div class="sidebar-item" onclick="scrollToPage('detail-malang-batu.html')">
+        <div class="sidebar-file-info">
+          <span class="file-icon">📄</span>
+          <span class="file-name">detail-malang-batu.html</span>
+        </div>
+        <span class="badge badge-warning">2 Issues</span>
+      </div>
+    
+      <div class="sidebar-item" onclick="scrollToPage('detail-tumpak-sewu.html')">
+        <div class="sidebar-file-info">
+          <span class="file-icon">📄</span>
+          <span class="file-name">detail-tumpak-sewu.html</span>
+        </div>
+        <span class="badge badge-warning">2 Issues</span>
+      </div>
+    
+      <div class="sidebar-item" onclick="scrollToPage('detail-wisata.html')">
+        <div class="sidebar-file-info">
+          <span class="file-icon">📄</span>
+          <span class="file-name">detail-wisata.html</span>
+        </div>
+        <span class="badge badge-warning">3 Issues</span>
+      </div>
+    
+      <div class="sidebar-item" onclick="scrollToPage('galeri.html')">
+        <div class="sidebar-file-info">
+          <span class="file-icon">📄</span>
+          <span class="file-name">galeri.html</span>
+        </div>
+        <span class="badge badge-warning">2 Issues</span>
+      </div>
+    
+      <div class="sidebar-item" onclick="scrollToPage('index.html')">
+        <div class="sidebar-file-info">
+          <span class="file-icon">📄</span>
+          <span class="file-name">index.html</span>
+        </div>
+        <span class="badge badge-warning">3 Issues</span>
+      </div>
+    
+      <div class="sidebar-item" onclick="scrollToPage('kontak.html')">
+        <div class="sidebar-file-info">
+          <span class="file-icon">📄</span>
+          <span class="file-name">kontak.html</span>
+        </div>
+        <span class="badge badge-warning">2 Issues</span>
+      </div>
+    
+      <div class="sidebar-item" onclick="scrollToPage('paket.html')">
+        <div class="sidebar-file-info">
+          <span class="file-icon">📄</span>
+          <span class="file-name">paket.html</span>
+        </div>
+        <span class="badge badge-warning">3 Issues</span>
+      </div>
+    
+      <div class="sidebar-item" onclick="scrollToPage('sewa-mobil.html')">
+        <div class="sidebar-file-info">
+          <span class="file-icon">📄</span>
+          <span class="file-name">sewa-mobil.html</span>
+        </div>
+        <span class="badge badge-warning">2 Issues</span>
+      </div>
+    
+      <div class="sidebar-item" onclick="scrollToPage('tentang.html')">
+        <div class="sidebar-file-info">
+          <span class="file-icon">📄</span>
+          <span class="file-name">tentang.html</span>
+        </div>
+        <span class="badge badge-warning">2 Issues</span>
+      </div>
+    
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
