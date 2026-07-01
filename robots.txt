@@ -4,6 +4,4 @@ Disallow: /private/
 Disallow: /scripts/
 Disallow: /seo-report/
 
-Sitemap: https://www.deltatour.my.id/sitemap.xml
-Sitemap: https://www.deltatour.my.id/sitemap-image.xml
-Sitemap: https://www.deltatour.my.id/sitemap-video.xml
+Sitemap: https://deltatour.my.id/sitemap.xml

@@ -3,13 +3,13 @@
   "@graph": [
     {
       "@type": "Organization",
-      "@id": "https://www.deltatour.my.id/#organization",
+      "@id": "https://deltatour.my.id/#organization",
       "name": "Delta Tour",
-      "url": "https://www.deltatour.my.id",
+      "url": "https://deltatour.my.id",
       "logo": {
         "@type": "ImageObject",
-        "@id": "https://www.deltatour.my.id/#logo",
-        "url": "https://www.deltatour.my.id/assets/img/logo-delta-tour.png",
+        "@id": "https://deltatour.my.id/#logo",
+        "url": "https://deltatour.my.id/assets/img/logo-delta-tour.png",
         "caption": "Delta Tour"
       },
       "telephone": "+62-822-2817-8439",
@@ -29,12 +29,12 @@
     },
     {
       "@type": "WebSite",
-      "@id": "https://www.deltatour.my.id/#website",
-      "url": "https://www.deltatour.my.id",
+      "@id": "https://deltatour.my.id/#website",
+      "url": "https://deltatour.my.id",
       "name": "Delta Tour",
       "description": "Delta Tour melayani paket wisata Bromo, Kawah Ijen, Kawah Wurung Bondowoso, Banyuwangi, Lumajang, Baluran, wisata Jember, dan sewa mobil dengan driver berpengalaman dari Jember.",
       "publisher": {
-        "@id": "https://www.deltatour.my.id/#organization"
+        "@id": "https://deltatour.my.id/#organization"
       },
       "inLanguage": "id-ID"
     }

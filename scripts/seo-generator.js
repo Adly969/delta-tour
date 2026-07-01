@@ -1,4 +1,5 @@
 const { logger, findHtmlFiles, parseHtmlFile } = require('./utils');
+const { overhaulHtmlFiles } = require('./seo-html-overhauler');
 const { generateSitemaps } = require('./sitemap-generator');
 const { generateMetaFiles } = require('./meta-files-generator');
 const { generateSchema } = require('./schema-generator');
@@ -10,7 +11,14 @@ function main() {
   logger.info('  SEO Generator & Auditor Suite (Node.js) ');
   logger.info('==========================================');
 
-  // Step 1: Scan for HTML files
+  // Step 1: Pre-process HTML files for optimizations (Duplicate fonts, Alt images, etc.)
+  try {
+    overhaulHtmlFiles();
+  } catch (err) {
+    logger.error(`Error during HTML overhaul: ${err.message}`);
+  }
+
+  // Step 2: Scan for HTML files
   const htmlFiles = findHtmlFiles();
   logger.info(`Found ${htmlFiles.length} HTML file(s) to process.`);
 
@@ -19,7 +27,7 @@ function main() {
     return;
   }
 
-  // Step 2: Parse each file
+  // Step 3: Parse each file
   const parsedPages = [];
   htmlFiles.forEach(file => {
     try {
@@ -31,7 +39,7 @@ function main() {
     }
   });
 
-  // Step 3: Run sitemaps, metadata files, and schema generators
+  // Step 4: Run sitemaps, metadata files, and schema generators
   try {
     generateSitemaps(parsedPages);
   } catch (err) {
@@ -50,7 +58,7 @@ function main() {
     logger.error(`Error generating schema: ${err.message}`);
   }
 
-  // Step 4: Run Audits
+  // Step 5: Run Audits
   let auditResults;
   try {
     auditResults = runAudit(parsedPages);
@@ -59,7 +67,7 @@ function main() {
     return;
   }
 
-  // Step 5: Generate client-facing HTML report
+  // Step 6: Generate client-facing HTML report
   try {
     generateHtmlReport(auditResults);
   } catch (err) {

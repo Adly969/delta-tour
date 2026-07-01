@@ -2,13 +2,13 @@
  * SEO Generator Suite Configuration
  */
 module.exports = {
-  baseUrl: 'https://www.deltatour.my.id',
+  baseUrl: 'https://deltatour.my.id',
   
   // Organization Metadata (for schema.json & social)
   organization: {
     name: 'Delta Tour',
-    url: 'https://www.deltatour.my.id',
-    logoUrl: 'https://www.deltatour.my.id/assets/img/logo-delta-tour.png',
+    url: 'https://deltatour.my.id',
+    logoUrl: 'https://deltatour.my.id/assets/img/logo-delta-tour.png',
     telephone: '+62-822-2817-8439',
     email: 'benspipin2@gmail.com',
     streetAddress: 'Perumahan Bumi Ambulu Permai',
@@ -34,7 +34,7 @@ module.exports = {
     contact: 'mailto:benspipin2@gmail.com',
     expires: '2027-12-31T23:59:59.000Z',
     preferredLanguages: 'id, en',
-    canonical: 'https://www.deltatour.my.id/.well-known/security.txt'
+    canonical: 'https://deltatour.my.id/.well-known/security.txt'
   },
 
   // humans.txt Credits

@@ -4,7 +4,10 @@
   "description": "Zero-dependency SEO Generator and Auditor Suite for Delta Tour",
   "main": "scripts/seo-generator.js",
   "scripts": {
-    "seo": "node scripts/seo-generator.js"
+    "seo": "node scripts/seo-generator.js",
+    "generate:sitemap": "node scripts/seo-generator.js",
+    "predeploy": "npm run generate:sitemap",
+    "build": "npm run generate:sitemap"
   },
   "keywords": [
     "seo",

@@ -4,12 +4,23 @@ const config = require('./config');
 const { logger } = require('./utils');
 
 /**
- * Generate robots.txt, manifest.webmanifest, humans.txt, security.txt, and browserconfig.xml
+ * Generate robots.txt, site.webmanifest, humans.txt, security.txt, and browserconfig.xml
  */
 function generateMetaFiles() {
   logger.info('Generating metadata files...');
 
-  // 1. Robots.txt
+  // Clean up obsolete manifest if it exists
+  const oldManifest = 'manifest.webmanifest';
+  if (fs.existsSync(oldManifest)) {
+    try {
+      fs.unlinkSync(oldManifest);
+      logger.info(`Removed obsolete file: ${oldManifest}`);
+    } catch (err) {
+      logger.warn(`Could not remove ${oldManifest}: ${err.message}`);
+    }
+  }
+
+  // 1. Robots.txt (Only reference sitemap.xml)
   const robotsTxt = `User-agent: *
 Allow: /
 Disallow: /private/
@@ -17,13 +28,11 @@ Disallow: /scripts/
 Disallow: /seo-report/
 
 Sitemap: ${config.baseUrl}/sitemap.xml
-Sitemap: ${config.baseUrl}/sitemap-image.xml
-Sitemap: ${config.baseUrl}/sitemap-video.xml
 `;
   fs.writeFileSync('robots.txt', robotsTxt, 'utf-8');
   logger.success('Saved: robots.txt');
 
-  // 2. manifest.webmanifest
+  // 2. site.webmanifest
   const webManifest = {
     name: `${config.website.name} | Paket Wisata Jawa Timur dari Jember`,
     short_name: config.website.name,
@@ -40,8 +49,8 @@ Sitemap: ${config.baseUrl}/sitemap-video.xml
       }
     ]
   };
-  fs.writeFileSync('manifest.webmanifest', JSON.stringify(webManifest, null, 2), 'utf-8');
-  logger.success('Saved: manifest.webmanifest');
+  fs.writeFileSync('site.webmanifest', JSON.stringify(webManifest, null, 2), 'utf-8');
+  logger.success('Saved: site.webmanifest');
 
   // 3. humans.txt
   const humansTxt = `/* TEAM */
