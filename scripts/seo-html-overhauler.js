@@ -167,10 +167,23 @@ function overhaulHtmlFiles() {
     }
 
     // 10. Delay GTM/Google Analytics load to avoid blocking initial paint
-    const syncGtmScript = '<script async src="https://www.googletagmanager.com/gtag/js?id=G-V4ZENGR3N5"></script>';
-    const delayedGtmScript = '<script>\n    window.addEventListener(\'load\', function() {\n      var s = document.createElement(\'script\');\n      s.async = true;\n      s.src = \'https://www.googletagmanager.com/gtag/js?id=G-V4ZENGR3N5\';\n      document.head.appendChild(s);\n    });\n  </script>';
-    if (content.includes(syncGtmScript)) {
-      content = content.replace(syncGtmScript, delayedGtmScript);
+    const originalGtmScript = '<script async src="https://www.googletagmanager.com/gtag/js?id=G-V4ZENGR3N5"></script>';
+    const prevDelayedGtmScript = '<script>\n    window.addEventListener(\'load\', function() {\n      var s = document.createElement(\'script\');\n      s.async = true;\n      s.src = \'https://www.googletagmanager.com/gtag/js?id=G-V4ZENGR3N5\';\n      document.head.appendChild(s);\n    });\n  </script>';
+    
+    // Normalize lines to handle minor indentation changes
+    const targetDelayedGtmScript = '<script>\n    window.addEventListener(\'load\', function() {\n      setTimeout(function() {\n        var s = document.createElement(\'script\');\n        s.async = true;\n        s.src = \'https://www.googletagmanager.com/gtag/js?id=G-V4ZENGR3N5\';\n        document.head.appendChild(s);\n      }, 4000);\n    });\n  </script>';
+
+    if (content.includes(originalGtmScript)) {
+      content = content.replace(originalGtmScript, targetDelayedGtmScript);
+    } else if (content.includes(prevDelayedGtmScript)) {
+      content = content.replace(prevDelayedGtmScript, targetDelayedGtmScript);
+    } else {
+      // Also try fallback replacement with loose spaces for previous delay
+      const loosePrevDelayedGtmScript = prevDelayedGtmScript.replace(/\r?\n\s*/g, '\\s*');
+      const looseRegex = new RegExp(loosePrevDelayedGtmScript.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\\s\*/g, '\\s*'), 'g');
+      if (looseRegex.test(content)) {
+        content = content.replace(looseRegex, targetDelayedGtmScript);
+      }
     }
 
     if (content !== original) {
