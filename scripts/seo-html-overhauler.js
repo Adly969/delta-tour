@@ -121,14 +121,23 @@ function overhaulHtmlFiles() {
     });
 
     // 5. Accessibility optimizations
+    // Clean up existing duplicates from HTML files
+    content = content.replace(/(aria-label="Hubungi Admin Delta Tour via WhatsApp"\s*)+/g, 'aria-label="Hubungi Admin Delta Tour via WhatsApp" ');
+    content = content.replace(/(aria-required="true"\s*)+/g, 'aria-required="true" ');
+
     // Add aria-labels to WhatsApp buttons or icons if missing
-    content = content.replace(/data-whatsapp-general/g, 'data-whatsapp-general aria-label="Hubungi Admin Delta Tour via WhatsApp"');
-    content = content.replace(/class="btn btn-whatsapp" type="button" aria-label="Hubungi Admin/g, 'class="btn btn-whatsapp" type="button" aria-label="Hubungi Admin');
+    if (content.includes('data-whatsapp-general') && !content.includes('aria-label="Hubungi Admin Delta Tour via WhatsApp"')) {
+      content = content.replace(/data-whatsapp-general/g, 'data-whatsapp-general aria-label="Hubungi Admin Delta Tour via WhatsApp"');
+    }
     
     // Ensure form controls have associated labels and descriptive aria labels
     if (file === 'kontak.html' || file.startsWith('detail-')) {
-      content = content.replace(/id="nama"/g, 'id="nama" aria-required="true"');
-      content = content.replace(/id="wa"/g, 'id="wa" aria-required="true"');
+      if (content.includes('id="nama"') && !content.includes('id="nama" aria-required="true"')) {
+        content = content.replace(/id="nama"/g, 'id="nama" aria-required="true"');
+      }
+      if (content.includes('id="wa"') && !content.includes('id="wa" aria-required="true"')) {
+        content = content.replace(/id="wa"/g, 'id="wa" aria-required="true"');
+      }
     }
 
     // ===== PERFORMANCE OPTIMIZATIONS =====
