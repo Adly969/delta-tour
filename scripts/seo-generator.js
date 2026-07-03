@@ -11,14 +11,21 @@ function main() {
   logger.info('  SEO Generator & Auditor Suite (Node.js) ');
   logger.info('==========================================');
 
-  // Step 1: Pre-process HTML files for optimizations (Duplicate fonts, Alt images, etc.)
+  // Step 1: Generate schema.json so it is ready for embedding
+  try {
+    generateSchema();
+  } catch (err) {
+    logger.error(`Error generating schema: ${err.message}`);
+  }
+
+  // Step 2: Pre-process HTML files for optimizations (Duplicate fonts, Alt images, and schema embedding)
   try {
     overhaulHtmlFiles();
   } catch (err) {
     logger.error(`Error during HTML overhaul: ${err.message}`);
   }
 
-  // Step 2: Scan for HTML files
+  // Step 3: Scan for HTML files
   const htmlFiles = findHtmlFiles();
   logger.info(`Found ${htmlFiles.length} HTML file(s) to process.`);
 
@@ -27,7 +34,7 @@ function main() {
     return;
   }
 
-  // Step 3: Parse each file
+  // Step 4: Parse each file
   const parsedPages = [];
   htmlFiles.forEach(file => {
     try {
@@ -39,7 +46,7 @@ function main() {
     }
   });
 
-  // Step 4: Run sitemaps, metadata files, and schema generators
+  // Step 5: Run sitemaps and metadata files generators
   try {
     generateSitemaps(parsedPages);
   } catch (err) {
@@ -50,12 +57,6 @@ function main() {
     generateMetaFiles();
   } catch (err) {
     logger.error(`Error generating metadata files: ${err.message}`);
-  }
-
-  try {
-    generateSchema();
-  } catch (err) {
-    logger.error(`Error generating schema: ${err.message}`);
   }
 
   // Step 5: Run Audits

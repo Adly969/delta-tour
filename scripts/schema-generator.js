@@ -12,7 +12,7 @@ function generateSchema() {
     "@context": "https://schema.org",
     "@graph": [
       {
-        "@type": "Organization",
+        "@type": "TravelAgency",
         "@id": `${config.baseUrl}/#organization`,
         "name": config.organization.name,
         "url": config.organization.url,
@@ -22,8 +22,30 @@ function generateSchema() {
           "url": config.organization.logoUrl,
           "caption": config.organization.name
         },
+        "image": config.organization.logoUrl,
+        "description": config.website.description,
         "telephone": config.organization.telephone,
         "email": config.organization.email,
+        "priceRange": "$$",
+        "openingHoursSpecification": {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+            "Sunday"
+          ],
+          "opens": "00:00",
+          "closes": "23:59"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": -8.2655513,
+          "longitude": 113.608316
+        },
         "address": {
           "@type": "PostalAddress",
           "streetAddress": config.organization.streetAddress,
@@ -32,6 +54,16 @@ function generateSchema() {
           "postalCode": config.organization.postalCode,
           "addressCountry": config.organization.addressCountry
         },
+        "areaServed": [
+          "Jember",
+          "Banyuwangi",
+          "Bondowoso",
+          "Situbondo",
+          "Lumajang",
+          "Malang",
+          "Bromo",
+          "Bali"
+        ],
         "sameAs": config.organization.socialLinks
       },
       {
@@ -43,7 +75,12 @@ function generateSchema() {
         "publisher": {
           "@id": `${config.baseUrl}/#organization`
         },
-        "inLanguage": config.website.language
+        "inLanguage": config.website.language,
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": `${config.baseUrl}/?s={search_term_string}`,
+          "query-input": "required name=search_term_string"
+        }
       }
     ]
   };

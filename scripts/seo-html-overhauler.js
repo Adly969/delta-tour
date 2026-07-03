@@ -6,6 +6,14 @@ function overhaulHtmlFiles() {
   const htmlFiles = findHtmlFiles();
   console.log(`Starting HTML SEO & Performance Overhaul on ${htmlFiles.length} files...`);
 
+  // Load schema.json to embed in each HTML file
+  let schemaJson = '';
+  try {
+    schemaJson = fs.readFileSync(path.join(__dirname, '..', 'schema.json'), 'utf-8');
+  } catch (err) {
+    console.warn('[WARNING] schema.json not found during overhaul. Skipping dynamic schema embedding.');
+  }
+
   htmlFiles.forEach(file => {
     let content = fs.readFileSync(file, 'utf-8');
     let original = content;
@@ -195,6 +203,17 @@ function overhaulHtmlFiles() {
       const looseRegex = new RegExp(looseSetTimeout.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\\s\*/g, '\\s*'), 'g');
       if (looseRegex.test(content)) {
         content = content.replace(looseRegex, targetInteractionGtmScript);
+      }
+    }
+
+    // 11. Embed schema.json structured JSON-LD data
+    if (schemaJson) {
+      const cleanSchemaBlock = `<script type="application/ld+json">\n${schemaJson.trim()}\n</script>`;
+      const regexLdJson = /<script\s+type=["']application\/ld\+json["']>\s*\{[\s\S]*?\}\s*<\/script>/gi;
+      if (regexLdJson.test(content)) {
+        content = content.replace(regexLdJson, () => cleanSchemaBlock);
+      } else {
+        content = content.replace('</head>', `  ${cleanSchemaBlock}\n</head>`);
       }
     }
 
