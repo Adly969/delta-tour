@@ -117,9 +117,42 @@ function overhaulHtmlFiles() {
       content = content.replace(/id="wa"/g, 'id="wa" aria-required="true"');
     }
 
+    // ===== PERFORMANCE OPTIMIZATIONS =====
+
+    // 6. Async Google Fonts loading (eliminate render-blocking ~900ms)
+    const syncFontLink = '<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">';
+    const asyncFontLink = '<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap">\n  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media=\'all\'">\n  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"></noscript>';
+
+    if (content.includes(syncFontLink) && !content.includes('media="print"')) {
+      content = content.replace(syncFontLink, asyncFontLink);
+    }
+
+    // 7. Preload hero image WebP for LCP optimization
+    const heroPreloadTag = '<link rel="preload" as="image" href="assets/img/hero-delta-tour.webp" type="image/webp">';
+    if (content.includes('hero-page') && !content.includes('preload" as="image"')) {
+      // Insert after the preconnect to fonts.gstatic.com
+      content = content.replace(
+        '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>',
+        '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n  ' + heroPreloadTag
+      );
+    }
+
+    // 8. Use minified CSS
+    if (content.includes('style.css?') && !content.includes('style.min.css')) {
+      content = content.replace(/style\.css\?v=[^"']*/g, 'style.min.css?v=2.0');
+    }
+
+    // 9. Defer main.js
+    if (content.includes('<script src="assets/js/main.js"></script>') && !content.includes('defer')) {
+      content = content.replace(
+        '<script src="assets/js/main.js"></script>',
+        '<script src="assets/js/main.js" defer></script>'
+      );
+    }
+
     if (content !== original) {
       fs.writeFileSync(file, content, 'utf-8');
-      console.log(`Successfully overhauled HTML file: ${file}`);
+      console.log(`Successfully overhauled HTML file: ${path.basename(file)}`);
     }
   });
 
