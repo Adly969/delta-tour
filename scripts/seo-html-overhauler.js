@@ -156,6 +156,13 @@ function overhaulHtmlFiles() {
       );
     }
 
+    // 10. Delay GTM/Google Analytics load to avoid blocking initial paint
+    const syncGtmScript = '<script async src="https://www.googletagmanager.com/gtag/js?id=G-V4ZENGR3N5"></script>';
+    const delayedGtmScript = '<script>\n    window.addEventListener(\'load\', function() {\n      var s = document.createElement(\'script\');\n      s.async = true;\n      s.src = \'https://www.googletagmanager.com/gtag/js?id=G-V4ZENGR3N5\';\n      document.head.appendChild(s);\n    });\n  </script>';
+    if (content.includes(syncGtmScript)) {
+      content = content.replace(syncGtmScript, delayedGtmScript);
+    }
+
     if (content !== original) {
       fs.writeFileSync(file, content, 'utf-8');
       console.log(`Successfully overhauled HTML file: ${path.basename(file)}`);
