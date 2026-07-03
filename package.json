@@ -22,7 +22,7 @@
   ],
   "author": "Antigravity",
   "license": "ISC",
-  "devDependencies": {
+  "dependencies": {
     "sharp": "^0.33.0"
   }
 }

@@ -15,8 +15,8 @@ async function convertToWebP() {
   try {
     sharp = require('sharp');
   } catch {
-    console.error('[ERROR] sharp is not installed. Run: npm install sharp --save-dev');
-    process.exit(1);
+    console.warn('[WARNING] sharp is not installed on this environment. Since WebP assets are already pre-converted and committed, skipping dynamic conversion.');
+    return;
   }
 
   const files = fs.readdirSync(IMG_DIR).filter(f =>
