@@ -125,13 +125,23 @@ function overhaulHtmlFiles() {
 
     // ===== PERFORMANCE OPTIMIZATIONS =====
 
-    // 6. Async Google Fonts loading (eliminate render-blocking ~900ms)
-    const syncFontLink = '<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">';
-    const asyncFontLink = '<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap">\n  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media=\'all\'">\n  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"></noscript>';
-
-    if (content.includes(syncFontLink) && !content.includes('media="print"')) {
-      content = content.replace(syncFontLink, asyncFontLink);
+    // 6. Async Google Fonts loading (eliminate render-blocking ~900ms) - Self-healing approach
+    // First, remove any existing fonts preloads, links, or noscripts for these fonts to prevent duplicates
+    content = content.replace(/<link[^>]*href="https:\/\/fonts\.googleapis\.com\/css2\?family=Inter[^>]*>/gi, '');
+    content = content.replace(/<noscript>\s*<link[^>]*href="https:\/\/fonts\.googleapis\.com\/css2\?family=Inter[^>]*>\s*<\/noscript>/gi, '');
+    
+    // Inject the clean async fonts loading block right after the fonts.gstatic.com preconnect
+    const targetAsyncFontLink = '<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media=\'all\'">\n  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"></noscript>';
+    
+    if (content.includes('<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>')) {
+      content = content.replace(
+        '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>',
+        '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n  ' + targetAsyncFontLink
+      );
     }
+    
+    // Clean up empty or nested noscript blocks if any
+    content = content.replace(/<noscript>\s*(<noscript>)?\s*(<\/noscript>)?\s*<\/noscript>/gi, '');
 
     // 7. Preload hero image WebP for LCP optimization
     const heroPreloadTag = '<link rel="preload" as="image" href="assets/img/hero-delta-tour.webp" type="image/webp">';

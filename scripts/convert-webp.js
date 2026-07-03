@@ -8,7 +8,7 @@ const fs = require('fs');
 const path = require('path');
 
 const IMG_DIR = path.join(__dirname, '..', 'assets', 'img');
-const QUALITY = 65;
+const QUALITY = 60;
 
 async function convertToWebP() {
   let sharp;
@@ -40,8 +40,8 @@ async function convertToWebP() {
       // Smart resizing based on image role
       const lowerName = file.toLowerCase();
       if (lowerName.includes('hero')) {
-        // Hero background image: max width 1000px for mobile balance
-        pipeline = pipeline.resize({ width: 1000, withoutEnlargement: true });
+        // Hero background image: max width 800px for mobile performance
+        pipeline = pipeline.resize({ width: 800, withoutEnlargement: true });
       } else if (lowerName.includes('logo')) {
         // Logo: max width 120px
         pipeline = pipeline.resize({ width: 120, withoutEnlargement: true });
