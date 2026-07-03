@@ -16,17 +16,6 @@
       ],
       "destination": "https://deltatour.my.id/:path*",
       "permanent": true
-    },
-    {
-      "source": "/:path*",
-      "has": [
-        {
-          "type": "host",
-          "value": "delta-tour.vercel.app"
-        }
-      ],
-      "destination": "https://deltatour.my.id/:path*",
-      "permanent": true
     }
   ],
   "headers": [
