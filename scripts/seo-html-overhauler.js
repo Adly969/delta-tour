@@ -206,6 +206,46 @@ function overhaulHtmlFiles() {
       }
     }
 
+    // ===== EMBED AUTHOR EEAT BADGE & CROSS-SELLING RENTAL WIDGET =====
+    if (path.basename(file).startsWith('detail-') && path.basename(file) !== 'detail-wisata.html') {
+      const authorBadge = `<!-- AUTHOR_BADGE_START -->
+            <div class="author-badge" style="margin-top: 32px; padding: 16px; background: rgba(249, 168, 37, 0.04); border-left: 4px solid var(--accent); border-radius: 0 var(--radius) var(--radius) 0; display: flex; align-items: center; gap: 12px;">
+              <div class="author-avatar" style="width: 48px; height: 48px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.2rem;">DT</div>
+              <div>
+                <span style="display: block; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent); font-weight: 700;">Panduan Wisata Lokal</span>
+                <strong style="color: var(--primary); font-size: 0.95rem;">Ditulis oleh Tim Pemandu Delta Tour Jember</strong>
+                <p class="muted" style="margin: 4px 0 0 0; font-size: 0.85rem; line-height: 1.3;">Disusun berdasarkan pengalaman mendampingi ratusan trip pariwisata Jawa Timur.</p>
+              </div>
+            </div>
+            <!-- AUTHOR_BADGE_END -->`;
+
+      const rentalCrossSell = `<!-- RENTAL_CROSS_SELL_START -->
+          <div class="rental-cross-sell" style="margin-top: 24px; padding: 16px; background: rgba(11, 61, 92, 0.03); border: 1px solid rgba(11, 61, 92, 0.08); border-radius: var(--radius);">
+            <h3 style="margin-top: 0; margin-bottom: 8px; font-size: 1.1rem; color: var(--primary); font-family: Playfair Display, serif;">Butuh Sewa Mobil?</h3>
+            <p class="muted" style="font-size: 0.85rem; margin-bottom: 12px; line-height: 1.4;">Untuk perjalanan dinas atau wisata mandiri di Jember, sewa Hiace, Elf, atau Avanza/Innova plus driver berpengalaman.</p>
+            <a href="sewa-mobil.html" class="btn btn-secondary" style="width: 100%; justify-content: center; font-size: 0.9rem; padding: 10px 16px;">Lihat Pilihan Mobil</a>
+          </div>
+          <!-- RENTAL_CROSS_SELL_END -->`;
+
+      // Clean up previous templates if any
+      content = content.replace(/<!-- AUTHOR_BADGE_START -->[\s\S]*?<!-- AUTHOR_BADGE_END -->/gi, '');
+      content = content.replace(/<!-- RENTAL_CROSS_SELL_START -->[\s\S]*?<!-- RENTAL_CROSS_SELL_END -->/gi, '');
+
+      // Inject Author Badge
+      const targetEndContent = '</div>\\s*<\\/article>';
+      const contentRegex = new RegExp(targetEndContent, 'i');
+      if (contentRegex.test(content)) {
+        content = content.replace(contentRegex, authorBadge + '\n          </div>\n        </article>');
+      }
+
+      // Inject Cross-selling Rental Widget
+      const targetEndSide = '<\\/aside>';
+      const sideRegex = new RegExp(targetEndSide, 'i');
+      if (sideRegex.test(content)) {
+        content = content.replace(sideRegex, rentalCrossSell + '\n        </aside>');
+      }
+    }
+
     // 11. Embed schema.json structured JSON-LD data
     if (schemaJson) {
       const cleanSchemaBlock = `<script type="application/ld+json">\n${schemaJson.trim()}\n</script>`;
