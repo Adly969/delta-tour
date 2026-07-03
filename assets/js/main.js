@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const handleScroll = () => {
       header.classList.toggle("scrolled", window.scrollY > 20);
     };
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll(); // Run once on load
   }
 
