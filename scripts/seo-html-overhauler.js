@@ -176,23 +176,25 @@ function overhaulHtmlFiles() {
       }
     }
 
-    // 10. Delay GTM/Google Analytics load to avoid blocking initial paint
+    // 10. Delay GTM/Google Analytics load to avoid blocking initial paint (User interaction lazy-load)
     const originalGtmScript = '<script async src="https://www.googletagmanager.com/gtag/js?id=G-V4ZENGR3N5"></script>';
-    const prevDelayedGtmScript = '<script>\n    window.addEventListener(\'load\', function() {\n      var s = document.createElement(\'script\');\n      s.async = true;\n      s.src = \'https://www.googletagmanager.com/gtag/js?id=G-V4ZENGR3N5\';\n      document.head.appendChild(s);\n    });\n  </script>';
-    
-    // Normalize lines to handle minor indentation changes
-    const targetDelayedGtmScript = '<script>\n    window.addEventListener(\'load\', function() {\n      setTimeout(function() {\n        var s = document.createElement(\'script\');\n        s.async = true;\n        s.src = \'https://www.googletagmanager.com/gtag/js?id=G-V4ZENGR3N5\';\n        document.head.appendChild(s);\n      }, 4000);\n    });\n  </script>';
+    const prevDelayedGtm1 = '<script>\n    window.addEventListener(\'load\', function() {\n      var s = document.createElement(\'script\');\n      s.async = true;\n      s.src = \'https://www.googletagmanager.com/gtag/js?id=G-V4ZENGR3N5\';\n      document.head.appendChild(s);\n    });\n  </script>';
+    const prevDelayedGtm2 = '<script>\n    window.addEventListener(\'load\', function() {\n      setTimeout(function() {\n        var s = document.createElement(\'script\');\n        s.async = true;\n        s.src = \'https://www.googletagmanager.com/gtag/js?id=G-V4ZENGR3N5\';\n        document.head.appendChild(s);\n      }, 4000);\n    });\n  </script>';
+
+    const targetInteractionGtmScript = '<script>\n    (function() {\n      var loaded = false;\n      function loadGTM() {\n        if (loaded) return;\n        loaded = true;\n        window.removeEventListener(\'scroll\', loadGTM);\n        window.removeEventListener(\'mousemove\', loadGTM);\n        window.removeEventListener(\'touchstart\', loadGTM);\n        var s = document.createElement(\'script\');\n        s.async = true;\n        s.src = \'https://www.googletagmanager.com/gtag/js?id=G-V4ZENGR3N5\';\n        document.head.appendChild(s);\n      }\n      window.addEventListener(\'scroll\', loadGTM, { passive: true });\n      window.addEventListener(\'mousemove\', loadGTM, { passive: true });\n      window.addEventListener(\'touchstart\', loadGTM, { passive: true });\n    })();\n  </script>';
 
     if (content.includes(originalGtmScript)) {
-      content = content.replace(originalGtmScript, targetDelayedGtmScript);
-    } else if (content.includes(prevDelayedGtmScript)) {
-      content = content.replace(prevDelayedGtmScript, targetDelayedGtmScript);
+      content = content.replace(originalGtmScript, targetInteractionGtmScript);
+    } else if (content.includes(prevDelayedGtm1)) {
+      content = content.replace(prevDelayedGtm1, targetInteractionGtmScript);
+    } else if (content.includes(prevDelayedGtm2)) {
+      content = content.replace(prevDelayedGtm2, targetInteractionGtmScript);
     } else {
-      // Also try fallback replacement with loose spaces for previous delay
-      const loosePrevDelayedGtmScript = prevDelayedGtmScript.replace(/\r?\n\s*/g, '\\s*');
-      const looseRegex = new RegExp(loosePrevDelayedGtmScript.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\\s\*/g, '\\s*'), 'g');
+      // Loose regex replace check for setTimeout version
+      const looseSetTimeout = prevDelayedGtm2.replace(/\r?\n\s*/g, '\\s*');
+      const looseRegex = new RegExp(looseSetTimeout.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\\s\*/g, '\\s*'), 'g');
       if (looseRegex.test(content)) {
-        content = content.replace(looseRegex, targetDelayedGtmScript);
+        content = content.replace(looseRegex, targetInteractionGtmScript);
       }
     }
 
