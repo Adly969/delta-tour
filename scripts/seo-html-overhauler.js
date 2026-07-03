@@ -148,12 +148,22 @@ function overhaulHtmlFiles() {
       content = content.replace(/style\.css\?v=[^"']*/g, 'style.min.css?v=2.0');
     }
 
-    // 9. Defer main.js
-    if (content.includes('<script src="assets/js/main.js"></script>') && !content.includes('defer')) {
-      content = content.replace(
-        '<script src="assets/js/main.js"></script>',
-        '<script src="assets/js/main.js" defer></script>'
-      );
+    // 9. Defer main.js and code split detail-wisata.js
+    if (content.includes('<script src="assets/js/main.js"></script>') || content.includes('<script src="assets/js/main.js" defer></script>')) {
+      const isDefer = content.includes('defer');
+      const targetScript = isDefer ? '<script src="assets/js/main.js" defer></script>' : '<script src="assets/js/main.js"></script>';
+      
+      if (file.endsWith('detail-wisata.html')) {
+        if (!content.includes('detail-wisata.js')) {
+          content = content.replace(targetScript, '<script src="assets/js/main.js" defer></script>\n  <script src="assets/js/detail-wisata.js" defer></script>');
+        } else if (!isDefer) {
+          content = content.replace(targetScript, '<script src="assets/js/main.js" defer></script>');
+        }
+      } else {
+        if (!isDefer) {
+          content = content.replace(targetScript, '<script src="assets/js/main.js" defer></script>');
+        }
+      }
     }
 
     // 10. Delay GTM/Google Analytics load to avoid blocking initial paint
