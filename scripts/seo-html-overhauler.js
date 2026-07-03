@@ -36,6 +36,12 @@ function overhaulHtmlFiles() {
     content = content.replace(imgRegex, (match, attrsStr) => {
       // Parse current attributes
       let src = (attrsStr.match(/src=["']([^"']*)["']/i) || [])[1] || '';
+      
+      // Convert local jpg/png (except favicons) to webp
+      if (src && /\.(jpe?g|png)$/i.test(src) && !src.includes('favicon') && !src.startsWith('http') && !src.startsWith('//')) {
+        src = src.replace(/\.(jpe?g|png)$/i, '.webp');
+      }
+
       let alt = (attrsStr.match(/alt=["']([^"']*)["']/i) || [])[1];
       let title = (attrsStr.match(/title=["']([^"']*)["']/i) || [])[1];
       let width = (attrsStr.match(/width=["']([^"']*)["']/i) || [])[1];
